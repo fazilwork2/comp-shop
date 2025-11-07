@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+enum Role {
+  customer
+  admin
+}
+
+model User {
+  id        String   @id @default(uuid())    
+  email     String   @unique
+  name      String?
+  role      Role     @default(customer)
+  password  String
+  createdAt DateTime @default(now())
+  verify    Boolean @default(false) 
+  // 💬 Один пользователь может иметь много заказов
+  orders    Order[]
+}
+
+enum category {
+  laptop 
+  desktop
+  accessory
+}
+
+model Product {
+  id        String   @id @default(uuid())    
+  name      String?
+  category  category     @default(desktop)
+  description String
+  price     Int
+  stock     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+    // 💬 Один товар может встречаться во многих позициях заказа
+  orderItems  OrderItem[]
+}
+
+enum Status {
+  pending  
+  paid  
+  shipped
+  cancelled
+}
+
+model Order{
+  id        String   @id @default(uuid())   
+  userId    String   
+  total     Int
+  Status    Status 
+  createdAt DateTime @default(now())
+   // 💬 Связь с пользователем
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    // 💬 Один заказ может содержать несколько товаров
+  items     OrderItem[]
+}
+
+model OrderItem{
+  id        String   @id @default(uuid())   
+  orderId    String   
+  productId     String
+  quantity    Int 
+  price Int
+// 💬 Связи
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+
