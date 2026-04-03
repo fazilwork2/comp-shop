@@ -19,7 +19,6 @@ model User {
   password  String
   createdAt DateTime @default(now())
   verify    Boolean @default(false) 
-  // 💬 Один пользователь может иметь много заказов
   orders    Order[]
 }
 
@@ -38,7 +37,6 @@ model Product {
   stock     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-    // 💬 Один товар может встречаться во многих позициях заказа
   orderItems  OrderItem[]
 }
 
@@ -55,9 +53,7 @@ model Order{
   total     Int
   Status    Status 
   createdAt DateTime @default(now())
-   // 💬 Связь с пользователем
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-    // 💬 Один заказ может содержать несколько товаров
   items     OrderItem[]
 }
 
@@ -67,7 +63,6 @@ model OrderItem{
   productId     String
   quantity    Int 
   price Int
-// 💬 Связи
   order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

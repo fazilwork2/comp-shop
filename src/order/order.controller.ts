@@ -12,7 +12,6 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 export class OrderController {
   constructor(private orderService: OrderService) {}
 
-  // Создать заказ (customer)
   @Post("orders")
   @ApiOperation({ summary: 'Создать новый заказ' })
   @ApiResponse({ status: 201, description: 'Заказ успешно создан' })
@@ -22,7 +21,6 @@ export class OrderController {
     return this.orderService.create(req,dto);
   }
 
-  // Список своих заказов
   @UseGuards(AuthGuard)
   @Get("orders")
   @ApiOperation({ summary: 'Получить список своих заказов' })
@@ -31,7 +29,6 @@ export class OrderController {
     return this.orderService.findMine(req);
   }
 
-  // Детали заказа по id
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Получить детали заказа по ID' })
   @ApiParam({ name: 'id', description: 'ID заказа', example: 'a1b2c3d4' })
@@ -42,7 +39,6 @@ export class OrderController {
     return this.orderService.findOne(req, id);
   }
 
-  // Админ: изменить статус заказа
   @UseGuards(AuthGuard, AdminGuard)
   @Put('orders/:id/status')
   @ApiOperation({ summary: 'Изменить статус заказа (только для админа)' })

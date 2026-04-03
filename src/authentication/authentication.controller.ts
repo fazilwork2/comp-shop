@@ -59,7 +59,7 @@ export class AuthenticationController {
   @ApiOperation({
     summary: 'Получить информацию о текущем пользователе (по токену)',
   })
-  @ApiBearerAuth() // ← добавляем поддержку JWT в Swagger UI
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Профиль текущего пользователя' })
   @ApiResponse({ status: 401, description: 'Неавторизован' })
   @UseGuards(AuthGuard)
